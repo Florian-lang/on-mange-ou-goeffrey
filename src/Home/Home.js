@@ -1,18 +1,12 @@
-import React, { useState, useRef } from 'react';
-import logo from '../Images/goeffrey.PNG'
+import React, { useState } from 'react';
 import MapComponent from '../Component/MapComponent';
+import HomeComponent from '../Component/HomeComponent';
 
 const Home = () => {
     const [showMap, setShowMap] = useState(false);
-    const mapRef = useRef(null);
 
     const handleEnterClick = () => {
         setShowMap(true);
-        if (mapRef.current) {
-            setTimeout(() => {
-                mapRef.current.invalidateSize();
-            }, 100);
-        }
     }
 
     return (
@@ -22,13 +16,9 @@ const Home = () => {
                 <MapComponent/>
             ) : 
             ( 
-                <>
-                    <h1 className="title">On mange où Goeffrey ? </h1>
-                    <img className='logo' src={logo}/>
-                    <button className="enter-button" onClick={handleEnterClick}>
-                        Entrer
-                    </button>
-                </>
+                <HomeComponent
+                    enterClick={handleEnterClick}
+                />
             )}
         </div> 
     );
