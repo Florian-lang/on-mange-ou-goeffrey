@@ -1,24 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import MapComponent from './Component/MapComponent';
+import HomeComponent from './Component/HomeComponent';
 
 function App() {
+  const [showMap, setShowMap] = useState(false);
+
+  const handleEnterClick = () => {
+      setShowMap(true);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="home-container">
+          {showMap ? 
+          (
+              <MapComponent/>
+          ) : 
+          ( 
+              <HomeComponent
+                  enterClick={handleEnterClick}
+              />
+          )}
+      </div> 
   );
 }
 

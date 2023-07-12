@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import '../index.css';
+import 'leaflet/dist/leaflet.css';
 
 const MapComponent = () => {
     return (
