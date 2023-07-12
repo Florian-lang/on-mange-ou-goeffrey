@@ -4,25 +4,25 @@ import MapComponent from './Component/MapComponent';
 import HomeComponent from './Component/HomeComponent';
 
 function App() {
-  const [showMap, setShowMap] = useState(false);
+    const [showMap, setShowMap] = useState(false);
 
-  const handleEnterClick = () => {
-      setShowMap(true);
-  }
+    const handleEnterClick = () => {
+        setShowMap(true);
+    }
 
-  return (
-      <div className="home-container">
-          {showMap ? 
-          (
-              <MapComponent/>
-          ) : 
-          ( 
-              <HomeComponent
-                  enterClick={handleEnterClick}
-              />
-          )}
-      </div> 
-  );
+    return (
+        <div className="home-container">
+            {showMap ? 
+            (
+                <MapComponent/>
+            ) : 
+            ( 
+                <HomeComponent
+                    enterClick={handleEnterClick}
+                />
+            )}
+        </div> 
+    );
 }
 
 export default App;
