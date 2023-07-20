@@ -3,9 +3,21 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import '../index.css';
 import 'leaflet/dist/leaflet.css';
 import HomeButton from './HomeButton';
+import { useGeolocated } from "react-geolocated";
+
 
 const MapComponent = () => {
-    const position = [45.159555, 1.533937];
+
+    const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+        useGeolocated({
+            positionOptions: {
+                enableHighAccuracy: false,
+            },
+            userDecisionTimeout: 5000,
+        });
+
+    const defaultPosition = [45.159555, 1.533937];
+    const position = coords ? [coords.latitude, coords.longitude] : defaultPosition;
 
     return (
         <>
