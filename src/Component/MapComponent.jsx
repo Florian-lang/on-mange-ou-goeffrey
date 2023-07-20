@@ -17,7 +17,7 @@ const MapComponent = () => {
         });
 
     const defaultPosition = [45.159555, 1.533937];
-    const position = coords ? [coords.latitude, coords.longitude] : defaultPosition;
+    const position = (isGeolocationAvailable && isGeolocationEnabled) ? [coords.latitude, coords.longitude] : defaultPosition;
 
     return (
         <>
