@@ -1,14 +1,15 @@
-import React from 'react';
+import {React, useEffect} from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import '../index.css';
 import 'leaflet/dist/leaflet.css';
 import HomeButton from './HomeButton';
 import { useGeolocated } from "react-geolocated";
+import axios from 'axios';
 
 
 const MapComponent = () => {
 
-    const { coords, isGeolocationAvailable, isGeolocationEnabled } =
+    const { coords } =
         useGeolocated({
             positionOptions: {
                 enableHighAccuracy: false,
@@ -17,7 +18,10 @@ const MapComponent = () => {
         });
 
     const defaultPosition = [45.159555, 1.533937];
-    const position = (isGeolocationAvailable && isGeolocationEnabled) ? [coords.latitude, coords.longitude] : defaultPosition;
+    const position = coords ? [coords.latitude, coords.longitude] : defaultPosition;
+
+    useEffect(() => {
+        axios.get('https://nominatim.openstreetmap.org/reverse?lat='+coords.latitude+'&lon='+coords.longitude+'&format=json')
 
     return (
         <>
