@@ -21,7 +21,8 @@ const MapComponent = () => {
     const position = coords ? [coords.latitude, coords.longitude] : defaultPosition;
 
     useEffect(() => {
-        axios.get('https://nominatim.openstreetmap.org/reverse?lat='+coords.latitude+'&lon='+coords.longitude+'&format=json')
+        axios.get('https://nominatim.openstreetmap.org/reverse?lat='+coords.latitude+'&lon='+coords.longitude+'&format=json');
+    }, [coords]);
 
     return (
         <>
