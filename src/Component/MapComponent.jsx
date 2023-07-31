@@ -4,11 +4,12 @@ import '../index.css';
 import 'leaflet/dist/leaflet.css';
 import HomeButton from './HomeButton';
 import axios from 'axios';
+import leaflet from 'leaflet';
 
 const MapComponent = () => {
     const [coords, setCoords] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [placeInfo, setPlaceInfo] = useState(null);
+    const [restaurants, setRestaurants] = useState([]);
 
     useEffect(() => {
         const fetchLocation = () => {
@@ -36,15 +37,17 @@ const MapComponent = () => {
         fetchLocation();
     }, []);
 
+    const perimeter = 5000;
+    const customIcon = leaflet.icon({iconUrl: 'marker-icon-red.png'});
 
     useEffect(() => {
         console.log("coords:", coords);
         if (coords !== null) {
             const { latitude, longitude } = coords;
-            const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
-        
+            const url = `https://overpass-api.de/api/interpreter?data=[out:json];(node[amenity=restaurant](around:${perimeter},${latitude},${longitude});node[amenity=fast_food](around:${perimeter},${latitude},${longitude});node[amenity=pub](around:${perimeter},${latitude},${longitude});node[shop=bakery](around:${perimeter},${latitude},${longitude}););out;`;
+
             axios.get(url).then((response) => {
-                setPlaceInfo(response.data);
+                setRestaurants(response.data.elements);
             }).catch((error) => {
                 console.error("Erreur lors de la récupération des informations du lieu:", error);
             });
@@ -63,17 +66,14 @@ const MapComponent = () => {
             {coords && (
                 <MapContainer center={position} zoom={20} className="h-screen w-full">
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <Marker position={position}>
-                    {placeInfo && (
-                        <Popup>
-                            <div>
-                                <h3>{placeInfo.display_name}</h3>
-                                <p>Latitude: {coords.latitude}</p>
-                                <p>Longitude: {coords.longitude}</p>
-                            </div>
-                        </Popup>
-                    )}
-                    </Marker>
+                    <Marker position={position}> Vous êtes ici </Marker>
+                    {restaurants.map((restaurant) => (
+                        <Marker icon={customIcon} key={restaurant.id} position={[restaurant.lat, restaurant.lon]}>
+                            <Popup>
+                                {restaurant.tags.name}
+                            </Popup>
+                        </Marker>
+                    ))}
                     <div className="absolute left-4 bottom-4">
                         <HomeButton />
                     </div> 
