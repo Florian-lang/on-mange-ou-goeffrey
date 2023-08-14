@@ -4,11 +4,14 @@ import '../index.css';
 import 'leaflet/dist/leaflet.css';
 import HomeButton from './HomeButton';
 import axios from 'axios';
+import PerimeterSelect from './PerimeterSelect';
 
 const MapComponent = () => {
     const [coords, setCoords] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [restaurants, setRestaurants] = useState([]);
+    const [perimeter, setPerimeter] = useState(1000);
+    const [randomLocation, setRandomLocation] = useState(null);
 
     useEffect(() => {
         const fetchLocation = () => {
@@ -36,10 +39,7 @@ const MapComponent = () => {
         fetchLocation();
     }, []);
 
-    const perimeter = 5000;
-
     useEffect(() => {
-        console.log("coords:", coords);
         if (coords !== null) {
             const { latitude, longitude } = coords;
             const url = `https://overpass-api.de/api/interpreter?data=[out:json];(node[amenity=restaurant](around:${perimeter},${latitude},${longitude});node[amenity=fast_food](around:${perimeter},${latitude},${longitude});node[amenity=pub](around:${perimeter},${latitude},${longitude});node[shop=bakery](around:${perimeter},${latitude},${longitude}););out;`;
@@ -50,7 +50,7 @@ const MapComponent = () => {
                 console.error("Erreur lors de la récupération des informations du lieu:", error);
             });
         }
-    }, [coords]);
+    }, [coords, perimeter, randomLocation]);
 
     const defaultPosition = [45.159555, 1.533937];
     const position = coords ? [coords.latitude, coords.longitude] : defaultPosition;
@@ -58,6 +58,13 @@ const MapComponent = () => {
     if (isLoading) {
         return <p>Loading map...</p>;
     }
+
+    const onPerimeterChange = (event) => {
+        setPerimeter(event.target.value);
+    };
+
+    const getrandomLocation = () => {
+    };
 
     return (
         <>
@@ -74,6 +81,10 @@ const MapComponent = () => {
                     ))}
                     <div className="absolute left-4 bottom-4">
                         <HomeButton />
+                    </div> 
+
+                    <div className="absolute right-4 top-4">
+                        <PerimeterSelect selectedPerimeter={{perimeter}} onPerimeterChange={onPerimeterChange} randomLocation={getrandomLocation}/>
                     </div> 
                 </MapContainer>
             )}
