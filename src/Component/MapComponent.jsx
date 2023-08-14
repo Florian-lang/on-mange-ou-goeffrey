@@ -4,7 +4,6 @@ import '../index.css';
 import 'leaflet/dist/leaflet.css';
 import HomeButton from './HomeButton';
 import axios from 'axios';
-import leaflet from 'leaflet';
 
 const MapComponent = () => {
     const [coords, setCoords] = useState(null);
@@ -38,7 +37,6 @@ const MapComponent = () => {
     }, []);
 
     const perimeter = 5000;
-    const customIcon = leaflet.icon({iconUrl: 'marker-icon-red.png'});
 
     useEffect(() => {
         console.log("coords:", coords);
@@ -68,7 +66,7 @@ const MapComponent = () => {
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     <Marker position={position}> Vous êtes ici </Marker>
                     {restaurants.map((restaurant) => (
-                        <Marker icon={customIcon} key={restaurant.id} position={[restaurant.lat, restaurant.lon]}>
+                        <Marker key={restaurant.id} position={[restaurant.lat, restaurant.lon]}>
                             <Popup>
                                 {restaurant.tags.name}
                             </Popup>
