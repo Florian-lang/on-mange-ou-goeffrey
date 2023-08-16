@@ -1,6 +1,6 @@
 import React from 'react';
 
-function HomeButton() {
+const HomeButton = () => {
     const handleGoToHomepage = () => {
         window.location.href = "/";
     };

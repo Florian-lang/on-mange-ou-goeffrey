@@ -5,13 +5,14 @@ import 'leaflet/dist/leaflet.css';
 import HomeButton from './HomeButton';
 import axios from 'axios';
 import PerimeterSelect from './PerimeterSelect';
+import RandomPlaceButton from './RandomPlaceButton';
 
 const MapComponent = () => {
     const [coords, setCoords] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [restaurants, setRestaurants] = useState([]);
     const [perimeter, setPerimeter] = useState(1000);
-    const [randomLocation, setRandomLocation] = useState(null);
+    const [randomNumber, setRandomNumber] = useState(0);
 
     useEffect(() => {
         const fetchLocation = () => {
@@ -50,7 +51,7 @@ const MapComponent = () => {
                 console.error("Erreur lors de la récupération des informations du lieu:", error);
             });
         }
-    }, [coords, perimeter, randomLocation]);
+    }, [coords, perimeter]);
 
     const defaultPosition = [45.159555, 1.533937];
     const position = coords ? [coords.latitude, coords.longitude] : defaultPosition;
@@ -63,7 +64,10 @@ const MapComponent = () => {
         setPerimeter(event.target.value);
     };
 
-    const getrandomLocation = () => {
+    const onClickRandomPlace = () => {
+        setRandomNumber(Math.floor(Math.random() * restaurants.length));
+        console.log(restaurants[randomNumber]);
+        setRestaurants(restaurants[randomNumber]);
     };
 
     return (
@@ -71,7 +75,12 @@ const MapComponent = () => {
             {coords && (
                 <MapContainer center={position} zoom={20} className="h-screen w-full">
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <Marker position={position}> Vous êtes ici </Marker>
+                    <Marker position={position}> 
+                        <Popup>
+                            Vous êtes ici 
+                        </Popup>
+                    </Marker>
+
                     {restaurants.map((restaurant) => (
                         <Marker key={restaurant.id} position={[restaurant.lat, restaurant.lon]}>
                             <Popup>
@@ -79,13 +88,18 @@ const MapComponent = () => {
                             </Popup>
                         </Marker>
                     ))}
+                    
                     <div className="absolute left-4 bottom-4">
                         <HomeButton />
                     </div> 
 
                     <div className="absolute right-4 top-4">
-                        <PerimeterSelect selectedPerimeter={{perimeter}} onPerimeterChange={onPerimeterChange} randomLocation={getrandomLocation}/>
+                        <PerimeterSelect selectedPerimeter={{perimeter}} onPerimeterChange={onPerimeterChange}/>
                     </div> 
+
+                    <div className="absolute right-4 top-16"> 
+                        <RandomPlaceButton getRandomPlace={onClickRandomPlace} />
+                    </div>
                 </MapContainer>
             )}
         </>
