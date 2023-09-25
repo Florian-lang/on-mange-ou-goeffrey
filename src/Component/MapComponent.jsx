@@ -13,6 +13,7 @@ const MapComponent = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [restaurants, setRestaurants] = useState([]);
     const [perimeter, setPerimeter] = useState(1000);
+    const [trigger, setTrigger] = useState(0);
 
     useEffect(() => {
         const fetchLocation = () => {
@@ -51,7 +52,7 @@ const MapComponent = () => {
                 console.error("Erreur lors de la récupération des informations du lieu:", error);
             });
         }
-    }, [coords, perimeter]);
+    }, [coords, perimeter, trigger]);
 
     const defaultPosition = [45.159555, 1.533937];
     const position = coords ? [coords.latitude, coords.longitude] : defaultPosition;
@@ -69,7 +70,7 @@ const MapComponent = () => {
     };
 
     const resetData = () => {
-        setPerimeter(1000);
+        setTrigger(trigger + 1);
     };
 
     return (
