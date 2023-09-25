@@ -6,13 +6,13 @@ import HomeButton from './HomeButton';
 import axios from 'axios';
 import PerimeterSelect from './PerimeterSelect';
 import RandomPlaceButton from './RandomPlaceButton';
+import ResetDataButton from './ResetDataButton';
 
 const MapComponent = () => {
     const [coords, setCoords] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [restaurants, setRestaurants] = useState([]);
     const [perimeter, setPerimeter] = useState(1000);
-    const [randomNumber, setRandomNumber] = useState(0);
 
     useEffect(() => {
         const fetchLocation = () => {
@@ -65,9 +65,11 @@ const MapComponent = () => {
     };
 
     const onClickRandomPlace = () => {
-        setRandomNumber(Math.floor(Math.random() * restaurants.length));
-        console.log(restaurants[randomNumber]);
-        setRestaurants(restaurants[randomNumber]);
+        setRestaurants([restaurants[Math.floor(Math.random() * restaurants.length)]]);
+    };
+
+    const resetData = () => {
+        setPerimeter(1000);
     };
 
     return (
@@ -91,6 +93,10 @@ const MapComponent = () => {
                     
                     <div className="absolute left-4 bottom-4">
                         <HomeButton />
+                    </div> 
+
+                    <div className="absolute right-4 bottom-4">
+                        <ResetDataButton setResetData={resetData}/>
                     </div> 
 
                     <div className="absolute right-4 top-4">
